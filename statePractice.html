@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <div id="root"></div>
+    </body>
+    <!--react, react-dom, babel을 import 하는 방법-->
+    <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        /* #3.9 까지의 내용 */
+
+        function MinutesToHours() {
+            const root = document.getElementById("root");   // html에 선언(?)한 id를 사용하려면 <script>태그 안에 변수로 가져와야 함. 
+            // const [minutes, setMinutes] = React.useState();      // 기존에 <input> 의 value로 썼지만, 헷갈리므로 아래로 변경해줌.
+            const [amount, setAmount] = React.useState();
+            const [inverted, setInverted] = React.useState(false);    // inverted는 true/false 인 단순한 변수(데이터)
+            const onChange = (event) => {
+                setAmount(event.target.value);
+            };
+            const reset = () => setAmount(0);
+            const onFlip = () => {
+                reset();
+                setInverted((current) => !current);    // current state의 inverted값을 반대로 변형시켜주는 것. 
+            }  
+            
+            return (
+                // input의 value를 minutes로 해주는건 매우 중요!!
+		        // 어디서든 input의 value를 수정해줄 수 있기 때문.
+                <div>
+                    <div>
+                        <label htmlFor="minutes">Minutes</label>
+                        <input value={inverted ? amount*60 : amount} 
+                            id="minutes" 
+                            placeholder="Minutes" 
+                            type="Number"
+                            onChange={onChange}
+                            disabled={inverted === true}
+                        />       
+                    </div>    
+                    <div>
+                        <label htmlFor="hours">Hours</label>
+                        <input id="hours" 
+                            value={inverted ? amount : Math.round(amount/60)}
+                            placeholder="Hours" 
+                            type="Number"
+                            onChange={onChange}
+                            disabled={inverted === false}
+                        />
+                    </div>
+                    <button onClick={reset}>Reset</button>
+                    <button onClick={onFlip}>{inverted? "Turn Back" : "Invert"}</button>
+                </div>
+            ); 
+        }
+
+        function KmToMiles(){
+            // React 내용을 랜더링할 위치의 <html>태그 내 <body> 태그 내 <div> 태그의 id를 <script> 태그로 가져오기
+            const root = document.getElementById("root");
+            // React의 state을 사용할 변수 array 선언해주기
+            const [amount, setAmount] = React.useState(0);
+            const onChange = (event)=> {
+                // console.log(event);
+                setAmount(event.target.value); // 이게 없으면 input에 값을 입력해도 default값(0)에서 변하지 않음. 
+            }
+
+            function reset(){
+                setAmount(0);
+            }
+            
+            const [invert, setInverted] = React.useState(false);
+            const onFlip = (event) => {
+                setInverted((current) => !current); // [!!중요] 또 까먹고 setInverted(!invert); 로 할 뻔 했음. 
+                reset();
+                // console.log(invert);
+            }
+
+
+            /* 1km = 0.621371mile */
+            return (
+                <div>
+                    <div>
+                        <label htmlFor="kilometers">KM</label>
+                        <input
+                            id="kilometers"
+                            value={invert === true ? amount/0.621371: amount}
+                            onChange={onChange}
+                            disabled = {invert === true}
+                        />                    
+                    </div>
+                    <div>
+                        <label htmlFor="miles">Miles</label>
+                        <input 
+                            id="miles"
+                            value={invert === false ? amount*0.621371 : amount}
+                            onChange={onChange}
+                            disabled = {invert === false}
+                        />
+                    </div>
+                    <button onClick={reset}>Reset</button>
+                    <button onClick={onFlip}>Flip</button>
+                </div>
+            );
+        }
+
+        // 2개의 컴포넌트를 랜더링함. 
+        function App() {
+            const [index, setIndex] = React.useState("0");
+            // const [index, setIndex] = React.useState(); 초기값이 없으면, select에서 사용자가 선택할 때까지 아무것도 보여주지 않음. 
+            const onSelect = (event) => {
+                // console.log(event); // onChange={onSelect} 추가하면, synthetilc event 얻을 수 있음.  
+                // console.log(event.target.value); // select 태그에서 어떤 option을 선택했는지, value값으로 파악 가능. 
+                setIndex(event.target.value);
+            }
+            console.log("render w/" + index);
+            return (
+                // divide and conquer!!! 
+                // 복붙 + 제목 변경 +  컴포넌트 리랜딩만으로 다양한 컴포넌트 조절이 가능. 
+                <div>
+                    <h1>Super Converter</h1> 
+                    <select value={index} onChange={onSelect}>
+                        <option value="0">Minutes & Hours</option>
+                        <option value="1">Km & Miles</option>
+                    </select>
+                    <hr/>
+                    {index === "0" ? <MinutesToHours/> : null}
+                    {index === "1" ? <KmToMiles/> : null}
+                </div>
+            ); 
+        }
+        ReactDOM.render(<App />, root); // 얘는 무조건 있어야 함!!
+
+    </script>
+</html>
+

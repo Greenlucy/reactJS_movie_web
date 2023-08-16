@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <div id="root"></div>
+    </body>
+    <!--react, react-dom, babel을 import 하는 방법-->
+    <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        const root = document.getElementById("root");   // html에 선언(?)한 id를 사용하려면 <script>태그 안에 변수로 가져와야 함. 
+        function App() {
+            /*  React.useState();
+                (2) [초깃값, 함수] 의 형태를 가지고 있음. */
+            const data = React.useState(0); // 초기값 설정이 가능함. 
+            // console.log(data);
+            // const counter = data[0];
+            // const modifier = data[1];
+            const [counter, modifier] = data;
+            return (
+                <div>
+                    <h3>Total clicks: {counter}</h3> 
+                    <button>Click me</button>
+                </div>
+            );
+        }
+        ReactDOM.render(<App />, root);
+
+    </script>
+</html>
+

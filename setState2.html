@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <div id="root"></div>
+    </body>
+    <!--react, react-dom, babel을 import 하는 방법-->
+    <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        const root = document.getElementById("root");   // html에 선언(?)한 id를 사용하려면 <script>태그 안에 변수로 가져와야 함. 
+        function App() {
+            /*  React.useState();
+                (2) [초깃값, 함수] 의 형태를 가지고 있음. */
+            
+            /*1번째 방법 : onClick 함수를 별도로 만들어서 
+            button 태그의 onClick 이벤트 리스너에 onClick 함수를 사용.*/
+            /* let [counter, modifier] = React.useState(0); // 초기값 설정이 가능함. 
+            const onClick = () => {
+                counter = counter + 1;
+                console.log(counter);
+            }
+            return (
+                <div>
+                    <h3>Total clicks: {counter}</h3> 
+                    <button onClick={onClick}>Click me</button>
+                </div>
+            ); 
+            */
+
+            /* 2번째 방법 : counter 업데이트하는데 modifier 함수를 사용. */
+            // modifier 명명은 set* 으로 시작해야 함. 
+            // const [counter, modifier] = React.useState(0);
+            const [counter, setCounter] = React.useState(0);
+            const onClick = () => {
+                // whaever we write 어떤값을 부여하던 modifier 함수는 그 값으로 업데이트하고 리렌더링 일으킬 예정. 
+                // modifier는 하나의 값을 받음.
+                // 수동이 아닌 자동으로 counter가 숫자형 데이터를 넘기고, 
+                // modifier() 함수로 데이터를 업데이트하고 리렌더링 함.
+                // modifier(988989565);
+                setCounter(counter + 1);
+            };
+            /* [중요]
+            데이터가 바뀔 때마다 컴포넌트를 리렌더링하고 UI를 refresh함.
+            state가 바뀌면 리렌더링이 일어나고, 새로운 값(counter)를 가지고 React가 컴포넌트를 refresh해줌. 
+            */
+            console.log("rendered");
+            console.log(counter) 
+            return (
+                <div>
+                    <h3>Total clicks: {counter}</h3> 
+                    <button onClick={onClick}>Click me</button>
+                </div>
+            ); 
+        }
+        ReactDOM.render(<App />, root); // 얘는 무조건 있어야 함!!
+
+    </script>
+</html>
+

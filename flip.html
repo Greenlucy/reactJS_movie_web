@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <div id="root"></div>
+    </body>
+    <!--react, react-dom, babel을 import 하는 방법-->
+    <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        const root = document.getElementById("root");   // html에 선언(?)한 id를 사용하려면 <script>태그 안에 변수로 가져와야 함. 
+        function App() {
+            // const [minutes, setMinutes] = React.useState();      // 기존에 <input> 의 value로 썼지만, 헷갈리므로 아래로 변경해줌.
+            const [amount, setAmount] = React.useState();
+            const [inverted, setInverted] = React.useState(false);    // inverted는 true/false 인 단순한 변수(데이터)
+            const onChange = (event) => {
+                setAmount(event.target.value);
+            };
+            const reset = () => setAmount(0);
+            const onFlip = () => {
+                reset();
+                setInverted((current) => !current);    // current state의 inverted값을 반대로 변형시켜주는 것. 
+            }  
+            
+            /*  1. 사용자가 input에 값을 입력할 때마다 변화가 발생하도록 하고 싶음. 
+                    -> onChange() 이벤트리스너와 onChange() 함수를 만들어 사용. 
+                2. 시간 단위로 계산하여 입력하기 위해 minutes의 input 입력값을 알고 싶음. 
+                    [참고-웹 개발자모드 콘솔에서.]
+                    -> Synthetic(합성)BasicEvent 는 ReactJS가 가짜 event를 만들기 때문에 뜨는 용어. 
+                       event를 최적화시키기 때문. 
+                    -> JavScript의 event를 보고 싶으면, nativeEvent를 보면 됨.
+                    
+                    value는 target에 있음. target의 value 이므로 
+                    event.target.value 순서로 적어주면 됨. 
+            */
+            return (
+                // input의 value를 minutes로 해주는건 매우 중요!!
+		        // 어디서든 input의 value를 수정해줄 수 있기 때문.
+                <div>
+                    <div>
+                        <h1 className="hi">Super Converter</h1> 
+                        <label htmlFor="minutes">Minutes</label>
+                        <input value={inverted ? amount*60 : amount} 
+                            id="minutes" 
+                            placeholder="Minutes" 
+                            type="Number"
+                            onChange={onChange}
+                            disabled={inverted === true}
+                        />       
+                    </div>    
+                    <div>
+                        <label htmlFor="hours">Hours</label>
+                        <input id="hours" 
+                            value={inverted ? amount : Math.round(amount/60)}
+                            placeholder="Hours" 
+                            type="Number"
+                            onChange={onChange}
+                            disabled={inverted === false}
+                        />
+                    </div>
+                    <button onClick={reset}>Reset</button>
+                    <button onClick={onFlip}>{inverted? "Turn Back" : "Invert"}</button>
+                </div>
+            ); 
+        }
+        ReactDOM.render(<App />, root); // 얘는 무조건 있어야 함!!
+
+    </script>
+</html>
+

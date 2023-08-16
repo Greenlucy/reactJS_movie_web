@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <div id="root"></div>
+    </body>
+    <!--react, react-dom, babel을 import 하는 방법-->
+    <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        const root = document.getElementById("root");   // html에 선언(?)한 id를 사용하려면 <script>태그 안에 변수로 가져와야 함. 
+        function App() {
+            // const [counter, modifier] = React.useState(0);
+            const [counter, setCounter] = React.useState(0);
+            const onClick = () => {
+                /*  setState() 생성 방법 2가지 */
+                // 1. 직접 값 설정하기
+                // setCounter(counter + 1);
+                
+                // 2. 함수를 전달하기
+                // 현재 state를 바탕으로 다음 state를 계산해내고 싶다면, 함수를 사용해야 함. 
+                setCounter((current) => current + 1);   // 훨씬 안전한 코드. 현재값을 이요하기 때문!
+            };
+            /* [중요]
+            데이터가 바뀔 때마다 컴포넌트를 리렌더링하고 UI를 refresh함.
+            state가 바뀌면 리렌더링이 일어나고, 새로운 값(counter)를 가지고 React가 컴포넌트를 refresh해줌. 
+            */
+            return (
+                <div>
+                    <h3>Total clicks: {counter}</h3> 
+                    <button onClick={onClick}>Click me</button>
+                </div>
+            ); 
+        }
+        ReactDOM.render(<App />, root); // 얘는 무조건 있어야 함!!
+
+    </script>
+</html>
+

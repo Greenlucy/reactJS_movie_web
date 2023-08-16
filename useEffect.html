@@ -1,0 +1,68 @@
+// 요거 #6 내용이며, create-react-app 설치 후 작업이어서 html 양식에 안 맞음. 
+// 내용 정리한 거 keep 위함임.
+// 원래는 APP.js 의 내용
+import { useState, useEffect } from "react";
+
+function App() {
+  const [counter, setValue] = useState(0); // import 미리 해둬서 React.useState(); 로 안 써도 됨. 
+  const [keyword, setKeyword] = useState("");
+  const [showing, setShowing] = useState(false);
+  const onClick = () => setValue((prev) => prev + 1 );
+  const onChange = (event) => setKeyword(event.target.value);
+  const onShowing = () => setShowing((prev) => !prev);
+  console.log("i run all the time"); // ? 2번 랜더링 함. -> index.js 의 <React.StrictMode> 가 활성화되어 있어서 그랬음. -> 개발중의 안전을 위한 장치. 배포된다면, 자동해제됨. 
+  
+  /* 첫번째 랜더일 때만 호출되는 함수 
+  const iRunOnlyOnce=()=>{
+    console.log("i run only once.");
+  }    
+  useEffect(iRunOnlyOnce, []);
+ */
+  useEffect(()=>{
+    console.log("CALL THE API....");
+  }, []); 
+
+  // keyword 가 변할 때만 실행되는 함수. counter가 변해도 실행되지 않음. 
+  useEffect(()=>{
+    console.log("SEARCH FOR", keyword);
+  }, [keyword]);
+
+  useEffect(()=>{
+    console.log("i run when 'counter' changes", keyword);
+  }, [keyword]);
+
+  function Hello(){
+    function byeFn(){
+      console.log("bye :<");
+    }
+    function hiFn(){
+      console.log("hi :>");
+      return byeFn;     // return으로 파괴되었을 때의 함수를 호출해줘야 함. ---> 요게 바로 Clean Up fucntion !!!!!
+      // return byeFn();     --> !발생했던 에러! 콘솔에 hi, bye 동시에 찍힘. 
+    }
+
+    // useEffect는 두번째 param인 dependecy가 변화할 때 호출됨. 
+    // dependecy가 비어있으면, component가 처음 생성될 때 function이 호출된 후에 다시 호출되지 않음. 
+    // component가 파괴될 때도 function 을 실행하고 싶다면, return으로 파괴되었을 때의 함수를 호출해줘야 함. 
+    useEffect(hiFn, []);
+    /* 이 함수 하나가 byeFn(), hiFn(), useEffect(); 를 합친 것. 
+    useEffect(()=>{
+      console.log("hi :)");
+      return ()=> console.log("bye :(");
+    }, []); */
+
+    return <h1>Hello</h1>;
+  }
+  
+  return (
+    <div>
+      <input value={keyword} onChange={onChange} type="text" placeholder="Search here..."/>
+      <h1>{counter}</h1>
+      <button onClick={onClick}>Click me</button>
+      {showing ? <Hello/> : null}
+      <button onClick={onShowing}>{showing ? "Hide":"Show"}</button>
+    </div>  
+  );
+}
+
+export default App;

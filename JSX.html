@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <div id="root"></div>
+    </body>
+    <!--react, react-dom, babel을 import 하는 방법-->
+    <script src="https://unpkg.com/react@16.7.0/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@16.7.0/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        
+        const root = document.getElementById("root");   // html에 선언(?)한 id를 사용하려면 <script>태그 안에 변수로 가져와야 함. 
+        // [함수만드는법1] 정석
+        function Title() {
+            return (
+                <h3 id="title" onMouseEnter={() => console.log("function mouse enter")}>
+                    Hello I'm Title
+                </h3>
+            );
+        };
+        // const Title =(
+        //     <h3 id="title" onMouseEnter={() => console.log("mouse enter")}>
+        //         Hello I'm a title
+        //     </h3>
+        // ); 
+
+        // [함수만드는법2] 변수, arrow function 
+        const Button = () => (  
+            <button id="btn1" style={{backgroundColor:"tomato"}} onClick={() => console.log("im clicked")}>
+                Click me
+            </button>
+        );
+        // const Button = (
+        //     <button id="btn1" style={{backgroundColor:"tomato"}} onClick={() => console.log("im clicked")}>
+        //         Click me
+        //     </button>
+        // );
+
+        /* div 태그 안에 담기 위해서 components를 const가 아닌 함수로 만들어줘야 함.
+            [중요] 함수로 만들면서 return 해줘야 함. 
+            function Title() {return ()} ;
+            const Button = () => (); */
+        const Container = () => (
+            <div>
+                <Title/>
+                <Button/>
+            </div>
+        );
+        
+        
+        ReactDOM.render(<Container/>, root);   // 3. span1, btn 동시에 render하기
+
+    </script>
+</html>
+

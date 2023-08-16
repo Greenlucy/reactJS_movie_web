@@ -1,0 +1,36 @@
+// #7.1, 7.2 To Do List 내용
+import { useState, useEffect } from "react";
+
+function App() {
+  const [toDo, setToDo] = useState("");
+  const [toDos, setToDos] = useState([]); // 여러 ToDo를 담을 수 있는 array 만들기
+  const onChange = (event) => setToDo(event.target.value);
+  const onSubmit = (event) => {
+    event.preventDefault(); // 기본 새로고침 방지 목적!!
+    if (toDo === "") {
+      return;
+    }
+    // toDo = ""  -> 절대 React에서 사용하지 않음!! modifier 함수를 사용해서 state 를 바꿈!!!!
+    setToDo("");    // 초기화. -> input에 입력 후, 엔터치면 내용 초기화 됨. 
+    // setToDos((prev) => prev.push(toDo));
+    setToDos(currentArray => [toDo, ...currentArray]);    // function (currentArray) {} 와 동일함. 
+  };
+  
+  return (
+    // <form> 이 submit이라는 이벤트를 갖고 있음. -> <form> 태그 안의 button 을 누르면 submit 할 것임.
+    <div>
+      <form onSubmit={onSubmit}>
+          <h1>My To Dos ({toDos.length})</h1>
+          <input onChange={onChange} value={toDo} type="text" placeholder="Write your to do...." />
+        <button>Add To Do</button>
+        <div></div>
+      </form>
+      <hr />
+      <ul>
+        {toDos.map((item, index) => <li key={index}>{item}</li>)}
+      </ul>
+    </div>
+  );
+}
+
+export default App;

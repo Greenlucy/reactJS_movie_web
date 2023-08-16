@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html><!-- step1 : html 만들기 -->
+    <body>
+        <span>Total clicks: 0</span>
+        <button id="btn">Click me</button>  
+    </body>
+    <script>
+        // const button = document.querySelector("button"); 
+        // --> 이렇게 하면 button이 많은 어플리케이션에서 제대로 작동하지 않음.
+        let counter = 0;
+
+        /* stpe2 : javascript에서 가져오기 */
+        const button = document.getElementById("btn");
+        const span = document.querySelector("span");
+        function handleClick(){                         // click에 대응할 함수 
+            /* stpe4 : 데이터를 업데이트 */
+            counter = counter + 1;
+            span.innerText = 'Total clicks: ${counter}';
+            console.log("i have being clicked");
+        }
+        /* step3 : event를 감지 */
+        button.addEventListener("click", handleClick);   // 정확하게 써야함. 틀려도 오류 체크 안 됨. 
+    </script>
+</html>
+

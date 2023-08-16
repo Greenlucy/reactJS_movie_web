@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <div id="root"></div>
+    </body>
+    <!--react, react-dom, babel을 import 하는 방법-->
+    <script src="https://unpkg.com/react@16.7.0/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@16.7.0/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        const root = document.getElementById("root");   // html에 선언(?)한 id를 사용하려면 <script>태그 안에 변수로 가져와야 함. 
+        let counter = 0;
+        function upCounter(){
+            // return (                             // return 을 쓰지 않아도 counter 갯수는 올라감. 
+                counter = counter + 1
+            // )
+            render();                               // [중요] 최종 렌더링 지점!! 
+        }
+
+        function render(){
+            ReactDOM.render(<Container/>, root);
+        }
+        
+        /* div 태그 안에 담기 위해서 components를 const가 아닌 함수로 만들어줘야 함.
+            [중요] 함수로 만들면서 return 해줘야 함. 
+            function Title() {return ()} ;
+            const Button = () => (); */
+        const Container = () => (
+            <div>
+                <h3>
+                    counter : {counter}
+                </h3>
+                <button id="btn1" onClick={upCounter}>
+                    Click me
+                </button>
+            </div>
+        );
+                
+        // ReactDOM.render(<Container/>, root);    // container만 렌더링 함. UI 랜더링은 따로 해줘야 함. 
+        render();                                  // render() 함수로 대체함. 
+
+    </script>
+</html>
+

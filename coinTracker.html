@@ -1,0 +1,36 @@
+// #7.2 coin Tracker 내용
+import { useState, useEffect } from "react";
+
+function App() {
+  const [loading, setLoading] = useState(true); // 로딩을 위한 state
+  const [coins, setCoins] = useState([]); // 초기값 : 빈 array []
+  // const [coins, setCoins] = useState();  초기값이 아무것도 설정되지 않으면 conins = undefined 상태. undefined는 array.length 가질 수 없고 에러 뜸. 
+
+  useEffect(() => {
+    fetch("https://api.coinpaprika.com/v1/tickers")
+      .then((response) => response.json())
+      .then((json) => {
+        setCoins(json);  // json -> coin에 해당함. 
+        setLoading(false);
+      });   
+  }, []); // -> 처음 한번만 실행하고 싶기 때문에 we're gonna watch nothing! 아무것도 주시하지 않을 것임. [](dependency) 비우기.
+  return (
+    // [기억]map을 사용하면 react.js는 element에 key를 주도록 했었음. 
+    <div>
+      <h1>The Conins! ({coins.length})</h1>
+      {loading ? (
+        <strong>Loading...</strong>
+      ) : (
+        <select>
+          {coins.map((coin, index) => (
+            <option>
+              {coin.name} ({coin.symbol}): ${coin.quotes.USD.price} USD 
+            </option>
+          ))}
+        </select>
+      )}
+    </div>
+  );
+}
+
+export default App;
